@@ -1,0 +1,13 @@
+--фамилия и инициалы
+SET STATISTICS TIME ON
+SET STATISTICS IO ON
+
+CREATE NONCLUSTERED INDEX [Index2] ON [dbo].[PersonLargeIndex]([last_name], [first_name])
+
+SELECT first_name, last_name
+FROM PersonLarge
+WHERE last_name = 'Боровикова' and (first_name LIKE 'С%')
+
+SELECT first_name, last_name
+FROM PersonLargeINDEX
+WHERE last_name = 'Боровикова' and (first_name LIKE 'С%')
