@@ -1,0 +1,37 @@
+SELECT * INTO PersonLarge From Person
+SELECT * INTO PersonLargeIndex From Person
+
+INSERT INTO PersonLarge 
+		SELECT first_name, last_name, job_id, flight_hours FROM Person
+
+INSERT INTO PersonLargeIndex
+		SELECT first_name, last_name, job_id, flight_hours FROM Person
+
+Go 100000
+
+SET STATISTICS TIME ON
+SET STATISTICS IO ON
+
+CREATE NONCLUSTERED INDEX [Index] ON [dbo].[PersonLargeIndex]([first_name], [last_name])
+
+SELECT first_name, last_name
+FROM PersonLarge
+WHERE first_name = 'Софья' and last_name = 'Боровикова'
+
+SELECT first_name, last_name
+FROM PersonLargeIndex
+WHERE first_name = 'Софья' and last_name = 'Боровикова'
+GO
+
+
+SELECT first_name, last_name
+FROM PersonLarge JOIN Job ON PersonLarge.job_id = Job.job_id
+WHERE first_name = 'Софья' and PersonLarge.job_id = 102 and last_name = 'Боровикова'
+
+SELECT first_name, last_name
+FROM (PersonLargeIndex JOIN Job ON PersonLargeIndex.job_id = Job.job_id) 
+WHERE first_name = 'Софья' and  job.job_id = 102 and last_name = 'Боровикова'
+GO
+
+--seek для этого индекса
+--ищем по фамилии и инициалам
